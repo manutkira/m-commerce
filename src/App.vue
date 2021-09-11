@@ -1,30 +1,56 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+<div id="app">
   <router-view/>
+</div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+export default {
+  name: 'home',
+  components: {
 
-#nav {
-  padding: 30px;
-}
+  },
+};
+</script>
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+<style lang="scss" scoped>
+button, .router-button{
+  transition: 500ms ease all;
+  cursor: pointer;
+  margin-top: 24px;
+  padding: 12px 24px;
+  background-color: #303030;
+  color: #fff;
+  border-radius: 20px;
+  border: none;
+  text-transform: uppercase;
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+  &:focus{
+    outline: none;
+  }
+  &:hover{
+    background-color: rgba(48, 48, 48, 0.7);
+  }
+}
+.button-ghost{
+  color: #000;
+  padding: 0;
+  border-radius: 0;
+  margin-top: 50px;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: transparent;
+  @media (min-width: 700px) {
+    margin-top: 0;
+    margin-left: auto;
+  }
+  i{
+    margin-left: 8px;
+  }
+}
+.button-light{
+  background-color: transparent;
+  border: 2px solid #fff;
+  color: #fff;
 }
 </style>

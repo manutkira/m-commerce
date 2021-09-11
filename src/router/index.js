@@ -1,11 +1,60 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import Product from '../section/Product.vue'
+import Admin from '../views/Admin.vue'
+import Overview from '../views/OverView.vue'
+import Products from '../views/Products.vue'
+import Order from '../views/Order.vue'
+import Login from '../components/Login.vue'
+import Register from '../components/Register.vue'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/product',
+    name: 'Product',
+    component: Product
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+    meta: {
+      requiresAuth: true
+    },
+    children: [
+      {
+        path: 'overview',
+        name: 'Overview',
+        component: Overview
+      },
+      {
+        path: 'products',
+        name: 'Products',
+        component: Products
+      },
+      {
+        path: 'orders',
+        name: 'Order',
+        component: Order
+      },
+    ]
   },
   {
     path: '/about',
@@ -22,6 +71,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from , next) => {
+  let currentUser = firebase.auth().currentUser
+  let requiresAuth = to.matched.some(res => res.meta.requiresAuth)
+  if(requiresAuth && !currentUser){
+     next('/login')
+  } else if(requiresAuth && currentUser){
+    next()
+  }else{
+    next()
+  }
 })
 
 export default router
