@@ -7,6 +7,7 @@ import Products from '../views/Products.vue'
 import Order from '../views/Order.vue'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
+import Checkout from '../components/Checkout.vue'
 import Profile from '../views/Profile.vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -31,6 +32,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout
   },
   {
     path: '/admin',

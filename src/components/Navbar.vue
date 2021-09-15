@@ -23,7 +23,9 @@
           </ul>
           <form class="form-inline my-2 my-lg-0 d-flex align-items-start">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <router-link to="/login" class="btn btn-outline-success my-2 my-sm-0" >GetStart</router-link>
+            <router-link to="/login" class="btn btn-outline-success my-2 my-sm-0" >Get Start</router-link>
+            <a href="#" class="btn btn-outline-success my-2 my-sm-0 ml-2" data-toggle="modal" data-target="#miniCart">
+              <i class="fas fa-cart-plus"> My cart</i> </a>
           </form>
         </div>
      </div>

@@ -18,11 +18,15 @@
         </div>
       </div>
     </div>
+
+    <mini-cart/>
+    
   </div>
 </template>
 
 <script>
 import Hero from '../components/Hero.vue';
+import MiniCart from '../components/miniCart.vue';
 import Navbar from '../components/Navbar.vue';
 import Product from '../section/Product.vue';
 export default {
@@ -31,6 +35,8 @@ export default {
     Hero,
     Navbar,
     Product,
+    MiniCart,
   }
 }
 </script>
+

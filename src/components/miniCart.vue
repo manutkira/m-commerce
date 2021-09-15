@@ -1,100 +1,99 @@
-
 <template>
-  <div class="products" id="products">
-      <div class="container">
-          <h1 class="text-center p-5">Our Products</h1>
-          <div class="row">
-              
-              <!-- <div class="col-md-4 " v-for="product in products" :key="product">
-                  <div class="card product-item" v-for="(image, index) in product.images" :key="index">
-                    <img :src="image" class="card-img-top" alt="...">
-                        <div class="card-body ">
-                            <div class="d-flex justify-content-between">
-                            <h5 class="card-title">{{product.name}}</h5>
-                            <h5 class="card-title">${{product.price}}</h5>
+  <div class="mini-cart">
+      <div class="modal fade" id="miniCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">My Cart</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
+              <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3 ">
+                <div class="col mt-3" v-for="item in this.$store.state.cart" :key="item">
+                    <div class="card h-100 shadow-sm"> 
+                      <div class="card-body">
+                  <div class="float-right time" @click="$store.commit('removeFromCart')">
+                      <i class="fa fa-times"></i>
+                  </div>
+                      <img :src="item.productImage" class="card-img-top" alt="...">
 
+                      </div>
+                        <div class="card-body">
+                            <div class="clearfix mb-3">
+                                <span class="float-end price-hp">{{item.productName}}</span> 
                             </div>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
+                                <h6 class="float-end price-hp">${{item.productPrice}}.00</h6> 
+                                <h5 class="card-title">Quantity: {{item.productQuantity}}</h5>
                         </div>
-                    </div>
-              </div> -->
-              <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
-        <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
-            <div class="col" v-for="product in products" :key="product">
-                <div class="card h-100 shadow-sm" v-for="(img, index) in product.images" :key="index"> <img :src="img" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <div class="clearfix mb-3"> <span class="float-start badge rounded-pill bg-primary">{{product.brand}}</span> <span class="float-end price-hp">Luxury</span> </div>
-                        <h4 class="card-title">{{product.name}}</h4>
-                        <h5 class="card-title">${{product.price}}.00</h5>
-                       <add-to-cart
-                        :image="getImage(product.images)"
-                        :name="product.name"
-                        :p-id="product.id"
-                        :price="product.price" />
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-          </div>
       </div>
-    
+          <div class="modal-footer">
+            <button type="button" class="secondary" data-dismiss="modal">Continue Shopping</button>
+            <button @click="checkout" type="button" class="primary">Check Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
-import AddToCart from '../components/AddToCart.vue'
-import { firebaseApp,db} from '../firebase/firebaseInit'
-import 'firebase/database'
 export default {
-  name: "Product",
-  props: {
-    msg: String
-  },
-  data(){
-      return{
-          products: [],
-      }
-  },
-  components: {
-    AddToCart
-  },
-  methods:{
-    getImage(images){
-        return images[0]
-    },
-    readData(){ 
-          db.collection('products').get().then(snapshot => {
-              snapshot.forEach(doc => {
-                  const data = {
-                      id: doc.id,
-                      name: doc.data().name,
-                      description: doc.data().description,
-                      brand: doc.data().brand,
-                      color: doc.data().color,
-                      price: doc.data().price,
-                      tag: doc.data().tag,
-                      images: doc.data().images
-                  }
-                  this.products.push(data)
-              })
-          })
+    name: 'miniCart',
+    methods: {
+        checkout(){
+            $('#miniCart').modal('hide')
+            this.$router.push('/checkout')
         },
-    },
-    created(){
-        this.readData()
-    },
-};
+    }
+}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .products{
-        margin-top: 7rem;
-        background: #f2f2f2;
-        padding-bottom: 3rem;
-    }
-    .container-fluid {
-    max-width: 1200px
+.time{
+    cursor: pointer;
+}
+.primary{
+  transition: 500ms ease all;
+  cursor: pointer;
+  margin-top: 24px;
+  padding: 12px 24px;
+  background-color: #303030;
+  color: #fff;
+  border-radius: 20px;
+  border: none;
+  text-transform: uppercase;
+
+  &:focus{
+    outline: none;
+  }
+  &:hover{
+    background-color: rgba(48, 48, 48, 0.7);
+  }
+}
+.secondary{
+  transition: 500ms ease all;
+  cursor: pointer;
+  margin-top: 24px;
+  padding: 12px 24px;
+  background-color: #5dc4a7;
+  color: #fff;
+  border-radius: 20px;
+  border: none;
+  text-transform: uppercase;
+
+  &:focus{
+    outline: none;
+  }
+  &:hover{
+    background-color: rgba(48, 48, 48, 0.7);
+  }
 }
 
 .card {
@@ -107,8 +106,8 @@ export default {
 
 .card-img,
 .card-img-top {
-    border-top-left-radius: calc(8rem - 50px);
-    border-bottom-right-radius: calc(8rem - 50px)
+    border-top-left-radius: calc(1rem - 1px);
+    border-bottom-right-radius: calc(1rem - 1px)
 }
 
 .card h5 {
@@ -233,7 +232,7 @@ export default {
 .price-hp {
     font-size: 1rem;
     font-weight: 600;
-    color: rgb(255, 0, 0)
+    color: darkgray
 }
 
 .amz-hp {
