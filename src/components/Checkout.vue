@@ -31,8 +31,7 @@
               </div>
               <div class="col-md-4">
 
-               <div class="nes-container with-title is-centered">
-                   Total Price: ${{this.$store.getters.totalPrice}}.00
+        <div class="nes-container with-title is-centered">
     <form @submit.prevent="handleSubmit">
       <fieldset :class="{ dis: loading }" class="fields">
         <div class="nes-field"></div>
@@ -40,7 +39,7 @@
         <div class="nes-field">
           <label for="email_field">Email</label>
           <input
-            placeholder="jane.doe@example.com "
+            placeholder="Enter your email "
             type="email"
             name="email"
             id="email_field"
@@ -50,7 +49,7 @@
         <div class="nes-field">
           <label for="address_field">Address</label>
           <input
-            placeholder="1234 Sycamore Street"
+            placeholder="Enter your address"
             type="text"
             name="address"
             id="address_field"
@@ -60,13 +59,19 @@
         <div class="nes-field">
           <label for="city_field">City</label>
           <input
-            placeholder="Reno"
+            placeholder="eg. Phnom Penh"
             type="text"
             name="city"
             id="city_field"
             class="nes-input"
           />
         </div>
+
+        <div class="">
+               <h4>
+                Total Price: ${{this.$store.getters.totalPrice}}.00
+               </h4>
+            </div>
       </fieldset>
       <div class="nes-field">
         <button
@@ -87,7 +92,6 @@
 </template>
 
 <script> 
-var stripe = Stripe('pk_test_51JZrutIbWCB3LvS8rPmn7lxPZUQQuM436RnxZmWgUmCWMu1iSUk8slsJgc8Fdl5a4Rdxq5bzdOlHFcn682yAvVx700fIRV23y7');
 import Navbar from './Navbar.vue'
 export default {
   components: { Navbar },
