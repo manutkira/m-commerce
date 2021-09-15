@@ -39,11 +39,8 @@
                 <div class="position-relative d-flex justify-content-center">
                     <span class="px-2 text-grey bg-white">Or Continue with</span>
                 </div>
-            <!-- <div class="position-absolute d-flex w-100 ">
-                <div class="w-100 border-top border-primary ">&nbsp;</div>
-            </div> -->
             </div>
-            <button class="btn btn-primary" type="submit"> 
+            <button @click="facebookSignIn" class="btn btn-primary" type="submit"> 
                 <i class="fab fa-facebook"></i>
             </button>
             <div class="angle"></div>
@@ -53,9 +50,10 @@
 </template>
 
 <script>
-import db from '../firebase/firebaseInit'
+import {db} from '../firebase/firebaseInit'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+// import {getAuth, signInWithPopup, FacebookAuthProvider} from 'firebase/auth'
 import loading from './loading.vue'
 export default {
   components: { loading },
@@ -92,9 +90,29 @@ export default {
                 this.$router.push({name: 'Admin'})
                 return
             }
+            this.loading = false
             this.error = true
             this.errorMsg = 'Please fill out all the fields'
             return
+        },
+        facebookSignIn(){
+            let provider = new firebase.auth.FacebookAuthProvider()
+
+            firebase.auth().signInWithPopup(provider).then(result => {
+                let token = result.credential.accessToken
+
+                let user = result.user
+                console.log(user);
+                this.$router.push({name: 'Home'})
+            }).catch(err => {
+                let errorCode = err.code
+                let errorMsg = err.message
+                console.log(errorMsg);
+
+                let email = err.email
+                let creadential = err.creadential
+                this.$router.push({name: 'Home'})
+            })
         }
     }
 }

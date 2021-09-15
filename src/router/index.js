@@ -7,6 +7,7 @@ import Products from '../views/Products.vue'
 import Order from '../views/Order.vue'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
+import Profile from '../views/Profile.vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -53,6 +54,11 @@ const routes = [
         path: 'orders',
         name: 'Order',
         component: Order
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: Profile
       },
     ]
   },

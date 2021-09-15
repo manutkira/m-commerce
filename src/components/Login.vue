@@ -19,6 +19,23 @@
             <router-link class="forgot-password" to="#">Forgot Your Password</router-link>
             <router-link class="forgot-password" to="/">Back To Homepage</router-link>
             <button @click.prevent="signIn">Sign In</button>
+            <div class="position-relative w-75 mt-3">
+            <div class="position-absolute top-0 bottom-0 start-0 end-0 d-flex w-100 align-items-center h-100">
+                <div class="w-100 border-top border-primary"></div>
+            </div>
+                <div class="position-relative d-flex justify-content-center">
+                    <span class="px-2 text-grey bg-white">Or Continue with</span>
+                </div>
+            </div>
+            <div>
+
+            <button @click="loginWithFacebook" class="btn btn-primary" type="submit"> 
+                <i class="fab fa-facebook"></i>
+            </button>
+            <button @click="loginWithGoogle" class="btn btn-primary mx-2" type="submit"> 
+                <i class="fab fa-google"></i>
+            </button>
+            </div>
             <div class="angle"></div>
         </form>
         <div class="background"></div>
@@ -49,11 +66,44 @@ export default {
                 this.error = false
                 this.errorMsg = ''
             }).catch(err => {
-                this.loading = false
                 this.error = true
                 this.errorMsg = err.message
+                this.loading = false
             })
-        }
+        },
+        loginWithFacebook() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+       provider.addScope('email');
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(() => {
+         // console.log("homeFace",provider);
+          this.$router.push({name: 'Admin'});
+          alert('signed in')
+        })
+        .catch(err => {
+          // TODO:
+           alert("Erruer: "+err.message);
+        });
+        //console.log(provider); 
+    },
+        loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(() => {
+         // console.log("homeFace",provider);
+         alert('signed in')
+          this.$router.push({name: 'Home'});
+        })
+        .catch(err => {
+          // TODO:
+           alert("Erruer: "+err.message);
+        });
+        //console.log(provider);
+    },
     }
 }
 </script>

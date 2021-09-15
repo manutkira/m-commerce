@@ -8,7 +8,7 @@
             <div class="sidebar-content">
                 <!-- sidebar-brand  -->
                 <div class="sidebar-item sidebar-brand">
-                    <a href="#">Vue Shop</a>
+                    <a href="/">Vue Shop</a>
                     <div id="close-sidebar" @click="closeMenu">
                         <i class="fas fa-times"></i>
                     </div>
@@ -22,7 +22,7 @@
                         <span class="user-name">Manut
                             <strong>Kira</strong>
                         </span>
-                        <span class="user-role"></span>
+                        <span class="user-role">{{email}}</span>
                         <span class="user-status">
                             <i class="fa fa-circle"></i>
                             <span>Online</span>
@@ -68,12 +68,12 @@
                             </router-link>
                         </li>
 
-                        <!-- <li>
+                        <li>
                             <router-link to="/admin/profile">
                                 <i class="fa fa-user"></i>
                                 <span>Profile</span>
                             </router-link>
-                        </li> -->
+                        </li>
                         <li>
                             <a href="#" @click="signOut">
                                 <i class="fa fa-power-off"></i>
@@ -105,10 +105,18 @@
 import Hero from '../components/Hero.vue';
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import { firebaseApp } from '../firebase/firebaseInit';
 export default {
   name: 'Home',
   components: {
     Hero,
+  },
+  data(){
+      return{
+          firstName: null,
+          lastName: null,
+          email: null,
+      }
   },
   methods:{
     closeMenu(){
@@ -119,6 +127,10 @@ export default {
             this.$router.replace({name: 'Home'})
         })
     }
+  },
+  created(){
+      let user = firebaseApp.auth().currentUser
+      this.email = user.email
   }
 }
 </script>
