@@ -4,7 +4,8 @@ let cart = window.localStorage.getItem('cart')
 
 export default createStore({
   state: {
-    cart: cart ? JSON.parse(cart) : []
+    cart: cart ? JSON.parse(cart) : [],
+    products: [],
   },
   getters: {
     totalPrice: state => {
@@ -17,6 +18,10 @@ export default createStore({
     }
   },
   mutations: {
+    viewDetail(state, payload){
+      state.products = []
+      state.products.push(payload)
+    },
     addToCart(state, payload){
       const found = state.cart.find(product => product.productId == payload.productId)
 

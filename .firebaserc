@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "m-commerce-58682"
-  }
+    "testing": "m-commerce-3f285",
+    "default": "m-commerce-3f285"
+  },
+  "targets": {}
 }

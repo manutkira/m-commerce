@@ -21,16 +21,27 @@
               <div class="container bg-trasparent my-4 p-3" style="position: relative;">
         <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-3">
             <div class="col mt-3" v-for="product in products" :key="product">
-                <div class="card h-100 shadow-sm " v-for="(img, index) in product.images" :key="index"> <img :src="img" class="card-img-top" alt="...">
+                <div class="nes-container is-rounded h-100 shadow-sm " v-for="(img, index) in product.images.slice(0,1)" :key="index"> <img :src="img" class="card-img-top" alt="...">
                     <div class="card-body">
                         <div class="clearfix mb-3"> <span class="float-start badge rounded-pill bg-primary">{{product.brand}}</span> <span class="float-end price-hp">Luxury</span> </div>
                         <h4 class="card-title">{{product.name}}</h4>
                         <h5 class="card-title">${{product.price}}.00</h5>
+                        <div class="d-flex">
                        <add-to-cart
                         :image="getImage(product.images)"
                         :name="product.name"
                         :p-id="product.id"
                         :price="product.price" />
+                        <details-btn
+                        :image="product.images"
+                        :name="product.name"
+                        :p-id="product.id"
+                        :price="product.price"
+                        :details="product.description"
+                        :brand="product.brand"
+                        :color="product.color"
+                        />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,6 +56,7 @@
 import AddToCart from '../components/AddToCart.vue'
 import { firebaseApp,db} from '../firebase/firebaseInit'
 import 'firebase/database'
+import DetailsBtn from '../components/DetailsBtn.vue';
 export default {
   name: "Product",
   props: {
@@ -56,7 +68,8 @@ export default {
       }
   },
   components: {
-    AddToCart
+    AddToCart,
+    DetailsBtn
   },
   methods:{
     getImage(images){
@@ -73,7 +86,7 @@ export default {
                       color: doc.data().color,
                       price: doc.data().price,
                       tag: doc.data().tag,
-                      images: doc.data().images
+                      images: doc.data().images,
                   }
                   this.products.push(data)
               })
@@ -107,8 +120,8 @@ export default {
 
 .card-img,
 .card-img-top {
-    border-top-left-radius: calc(12rem - 50px);
-    border-bottom-right-radius: calc(12rem - 50px)
+    border-top-left-radius: calc(7rem - 50px);
+    border-bottom-right-radius: calc(7rem - 50px)
 }
 
 .card h5 {

@@ -9,7 +9,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+        <div class="modal-body" >
             <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
               <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-2 g-2 ">
                 <div class="col mt-3" v-for="item in this.$store.state.cart" :key="item">
@@ -46,6 +46,12 @@
 <script>
 export default {
     name: 'miniCart',
+    data(){
+        return{
+            msg: '',
+            nothing: null,
+        }
+    },
     methods: {
         checkout(){
             $('#miniCart').modal('hide')

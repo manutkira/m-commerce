@@ -1,18 +1,20 @@
 <template>
-  <div class="add-to-cart d-flex ">
-      <button class="text-center nes-btn is-warning my-4" @click="addToCart">Add to Cart</button>
-      
+  <div class="view-details">
+      <button @click="viewProduct" class="text-center nes-btn ml-3 my-4 is-primary">View Details </button>
   </div>
 </template>
 
 <script>
 export default {
-    name: 'AddToCart',
+    name: 'ViewDetails',
     props: {
         name: String,
         price: String,
         pId: String,
         image: String,
+        details: String,
+        brand: String,
+        color: String,
     },
     data(){
         return{
@@ -20,19 +22,25 @@ export default {
             productPrice: this.price,
             productId: this.pId,
             productImage: this.image,
+            productDetails: this.details,
+            productBrand: this.brand,
+            productColor: this.color,
         }
     },
     methods: {
-        addToCart(){
-            $('#miniCart').modal('show')
-            this.$store.commit('addToCart', {
+        viewProduct(){
+            this.$store.commit('viewDetail', {
                 productName: this.productName,
                 productPrice: this.productPrice,
                 productId: this.productId,
                 productImage: this.productImage,
                 productQuantity: 1,
+                productDetails: this.productDetails,
+                productBrand: this.productBrand,
+                productColor: this.productColor,
             })
-        },
+            this.$router.push('/details')
+        }
     }
 }
 </script>

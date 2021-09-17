@@ -129,6 +129,7 @@
 </template>
 
 <script>
+
 import {firebaseApp, db} from '../firebase/firebaseInit'
 export default {
     name: 'Products',
