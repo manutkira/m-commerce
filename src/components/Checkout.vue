@@ -33,6 +33,16 @@
                 
 
         <div class="nes-container with-title font-weight-bold mtx">
+          <button
+          @click="pay"
+          type="submit"
+          class="mt-0 nes-btn is-success"
+          :class="{ dis: loading }"
+        >
+         Pay ${{ this.$store.getters.totalPrice}}.00
+        </button>
+
+        <div class="mt-4 font-weight-bold">Or...</div>
     <form @submit.prevent="handleSubmit">
       <fieldset :class="{ dis: loading }" class="fields">
         <div class="nes-field"></div>
@@ -96,121 +106,141 @@
         >
          Pay ${{ this.$store.getters.totalPrice}}.00
         </button>
+        
       </div>
     </form>
   </div>
               </div>
 
           </div>
-      <mini-cart/>
       </div>
   </div>
 </template>
 
 <script> 
-import MiniCart from './miniCart.vue'
 import Navbar from './Navbar.vue'
 import axios from 'axios'
+const Stripe = require('stripe')
 
-const style = {
-  style: {
-    base: {
-      iconColor: "#000",
-      color: "#000",
-      fontWeight: "800",
-      fontFamily: "Press Start 2P",
-      fontSize: "12px",
-      fontSmoothing: "antialiased",
-      ":-webkit-autofill": {
-        color: "#fce883"
-      },
-      "::placeholder": {
-        color: "green"
-      }
-    },
-    invalid: {
-      iconColor: "#FFC7EE",
-      color: "red"
-    }
-  }
-};
-import {  computed, onMounted, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+// const style = {
+//   style: {
+//     base: {
+//       iconColor: "#000",
+//       color: "#000",
+//       fontWeight: "800",
+//       fontFamily: "Press Start 2P",
+//       fontSize: "12px",
+//       fontSmoothing: "antialiased",
+//       ":-webkit-autofill": {
+//         color: "#fce883"
+//       },
+//       "::placeholder": {
+//         color: "green"
+//       }
+//     },
+//     invalid: {
+//       iconColor: "#FFC7EE",
+//       color: "red"
+//     }
+//   }
+// };
+// import {  computed, onMounted, ref } from "vue";
+// import { useRouter, useRoute } from "vue-router";
+let stripe = window.Stripe('pk_test_51JasmtLmIk3cwhpKRVnFMgew2o8UDmKn1u2mBy4fIgVYQot9AWn281MBNSuiWEo3WTmHlE3YLKW0iSX4n2SYh0bO002bxIEvtO')
 export default {
-  components: {
-    MiniCart
+  data(){
+    return{
+      sessionId: ''
+    }
   },
-  setup() {
-    const router = useRouter();
-    let stripe = null;
-    let loading = ref(true);
-    let elements = null;
-    onMounted(async () => {
-      const ELEMENT_TYPE = "card";
-      stripe = Stripe('pk_test_51JZrutIbWCB3LvS8rPmn7lxPZUQQuM436RnxZmWgUmCWMu1iSUk8slsJgc8Fdl5a4Rdxq5bzdOlHFcn682yAvVx700fIRV23y7');
-      elements = stripe.elements();
-      const element = elements.create(ELEMENT_TYPE, style);
-      element.mount("#stripe-element-mount-point");
-      loading.value = false;
-    });
-
-    async function handleSubmit(event) {
-      if (loading.value) return;
-      loading.value = true;
-      const { name, email, address, city } = Object.fromEntries(
-        new FormData(event.target)
-      );
-      console.log("here", name, email, address, city);
-      const billingDetails = {
-        name,
-        email,
-        address: {
-          city,
-        }
-      };
-      const cardElement = elements.getElement("card");
-      try {
-        const response = await fetch("http://localhost:4001/stripe", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ amount: 6000})
-        });
-        const { secret } = await response.json();
-        console.log("secret", secret);
-        const paymentMethodReq = await stripe.createPaymentMethod({
-          type: "card",
-          card: cardElement,
-          billing_details: billingDetails
-        });
-        console.log("error?", paymentMethodReq);
-        const { error } = await stripe.confirmCardPayment(secret, {
-          payment_method: paymentMethodReq.paymentMethod.id
-        });
-        loading.value = false;
-        console.log("error?", error);
-        router.push("/success");
-      } catch (error) {
-        console.log("error", error);
-        loading.value = false;
-      }
-    }
-    function redirect() {
+  methods: {
+    pay(){
       stripe.redirectToCheckout({
-        successUrl: "http://localhost:4001/success",
-        cancelUrl: "http://localhost:8080",
-        lineItems: [
-          {
-            price: "price_0J1wDR0ADhx7uM8yPL8Wmpoq",
-            quantity: 1
-          }
-        ],
-        mode: "payment"
-      });
+        sessionId: this.sessionId.id
+      }).then(result => {
+        
+        })
     }
-    return { redirect, loading, handleSubmit };
-  }
+  },
+        created(){
+          axios.post('https://us-central1-m-commerce-3f285.cloudfunctions.net/CheckoutSession').then(res => {
+            this.sessionId = res.data
+            console.log(res.data);
+          }).catch(err => {
+            console.log(err);
+          })
+        },
+  // setup() {
+  //   const router = useRouter();
+  //   let stripe = null;
+  //   let loading = ref(true);
+  //   let elements = null;
+  //   onMounted(async () => {
+  //     const ELEMENT_TYPE = "card";
+  //     stripe = Stripe('pk_test_51JZrutIbWCB3LvS8rPmn7lxPZUQQuM436RnxZmWgUmCWMu1iSUk8slsJgc8Fdl5a4Rdxq5bzdOlHFcn682yAvVx700fIRV23y7');
+  //     elements = stripe.elements();
+  //     const element = elements.create(ELEMENT_TYPE, style);
+  //     element.mount("#stripe-element-mount-point");
+  //     loading.value = false;
+  //   });
+
+  //   async function handleSubmit(event) {
+  //     if (loading.value) return;
+  //     loading.value = true;
+  //     const { name, email, address, city } = Object.fromEntries(
+  //       new FormData(event.target)
+  //     );
+  //     console.log("here", name, email, address, city);
+  //     const billingDetails = {
+  //       name,
+  //       email,
+  //       address: {
+  //         city,
+  //       }
+  //     };
+  //     const cardElement = elements.getElement("card");
+  //     try {
+  //       const response = await fetch("http://localhost:4001/stripe", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json"
+  //         },
+  //         body: JSON.stringify({ amount: 6000})
+  //       });
+  //       const { secret } = await response.json();
+  //       console.log("secret", secret);
+  //       const paymentMethodReq = await stripe.createPaymentMethod({
+  //         type: "card",
+  //         card: cardElement,
+  //         billing_details: billingDetails
+  //       });
+  //       console.log("error?", paymentMethodReq);
+  //       const { error } = await stripe.confirmCardPayment(secret, {
+  //         payment_method: paymentMethodReq.paymentMethod.id
+  //       });
+  //       loading.value = false;
+  //       console.log("error?", error);
+  //       router.push("/success");
+  //     } catch (error) {
+  //       console.log("error", error);
+  //       loading.value = false;
+  //     }
+  //   }
+  //   function redirect() {
+  //     stripe.redirectToCheckout({
+  //       successUrl: "http://localhost:4001/success",
+  //       cancelUrl: "http://localhost:8080",
+  //       lineItems: [
+  //         {
+  //           price: "price_0J1wDR0ADhx7uM8yPL8Wmpoq",
+  //           quantity: 1
+  //         }
+  //       ],
+  //       mode: "payment"
+  //     });
+  //   }
+  //   return { redirect, loading, handleSubmit };
+  // }
 };
 </script>
 
